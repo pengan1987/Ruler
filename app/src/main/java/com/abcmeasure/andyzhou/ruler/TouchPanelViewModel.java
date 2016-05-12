@@ -15,6 +15,7 @@ public class TouchPanelViewModel {
     public ObservableField<Integer> rightCursorMargin = new ObservableField<>();
     public ObservableField<String> distanceInchText = new ObservableField<>();
     float dpi;
+    int viewType;
 
     @BindingAdapter("dynamic_marginLeft")
     public static void setMarginLeft(View view, int leftMargin) {
@@ -31,12 +32,21 @@ public class TouchPanelViewModel {
         touchListener = new OnPanelTouchListener();
         leftCursorMargin.set(0);
         rightCursorMargin.set(0);
+        viewType = Constants.INCH_VIEWTYPE;
     }
 
     public void calculateTouchDistance(int left, int right) {
         int distancePoint = Math.abs(left - right);
-        double distanceInchFloat = (float) distancePoint / (float) dpi;
-        distanceInchText.set(String.format(Locale.CANADA, "%.2f in", distanceInchFloat));
+        double distanceInchFloat = (float) distancePoint / dpi;
+        double distanceCmFloat = (float) distancePoint / dpi * 2.54;
+        if (viewType == Constants.INCH_VIEWTYPE)
+            distanceInchText.set(String.format(Locale.CANADA, "%.2f in", distanceInchFloat));
+        else
+            distanceInchText.set(String.format(Locale.CANADA, "%.2f cm", distanceCmFloat));
+    }
+
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
     }
 
     public class OnPanelTouchListener implements View.OnTouchListener {

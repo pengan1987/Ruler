@@ -6,11 +6,15 @@ import android.view.ViewGroup;
 
 public class RulerGridViewModel {
     public String rulerNumber;
-    public float dpi;
+    public float dotsPerUnit;
 
-    public RulerGridViewModel(String rulerNumber, float dpi) {
+    public RulerGridViewModel(String rulerNumber, float dpi, int viewType) {
         this.rulerNumber = rulerNumber;
-        this.dpi = dpi;
+        if (viewType == Constants.INCH_VIEWTYPE)
+            this.dotsPerUnit = dpi;
+        else
+            //convert dpi to dpcm
+            this.dotsPerUnit = dpi / 2.54f;
     }
 
     @BindingAdapter("dynamic_width")
